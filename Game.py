@@ -339,9 +339,9 @@ class Game:
         while self.running:
             self.show_screen()
 
-            #Game receive input
-            for player in self.player:
-                player.handleEvent(self)
+            for event in pygame.event.get():
+                self.player[0].handleEvent(game=self, event=event)
+                self.player[1].handleEvent(game=self, event=event)
 
             #Game process input
             self.update()
@@ -349,16 +349,4 @@ class Game:
             #Update frame
             pygame.display.update()
             self.clock.tick(60)
-
-
-
-
-
-
-
-
-
-
-
-
 
