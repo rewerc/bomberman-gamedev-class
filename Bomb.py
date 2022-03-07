@@ -31,7 +31,7 @@ class Bomb:
         exp = Explosion(self.x, self.y, self)
         game.explosion.append(exp)
         for player in game.player:
-            exp.check_player(player)
+            exp.check_player(player, game)
         self.state = "ready"
         for i in range(4):
             newx = self.x
@@ -70,7 +70,7 @@ class Bomb:
                 exp = Explosion(newx, newy, self)
                 game.explosion.append(exp)
                 for player in game.player:
-                    exp.check_player(player)
+                    exp.check_player(player, game)
                 game.isItem(newx, newy)
                 bom = game.isBomb(newx, newy)
                 if bom != False:

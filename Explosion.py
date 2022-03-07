@@ -4,7 +4,7 @@ from math import *
 class Explosion:
     def __init__(self, x, y, bomb):
         self.playerres = (64,64)
-        self.img = pygame.image.load('assets/Creature/Creature_9.png')
+        self.img = pygame.image.load('assets/explosion.png')
         self.res = (64,64)
         self.x = x
         self.y = y
@@ -21,12 +21,15 @@ class Explosion:
         else:
             return False
 
-    def check_player(self, player):
+    def check_player(self, player, game):
         if player.type != self.bomb.owner.type:
             distance = sqrt((player.x - self.x)**2 + (player.y - self.y)**2)
             if distance < 50:
                 print("He Dead")
                 player.isDead = True
+                for p in game.player:
+                    if self.bomb.owner.type == p.type:
+                        p.score += 2
 
     def show_explosion(self, game):
         self.timer += self.change

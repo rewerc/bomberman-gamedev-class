@@ -9,6 +9,7 @@ from Wall import Wall
 from Bomb import Bomb
 from Loot import Loot
 from Opponent import Opponent
+from Grave import Grave
 
 class Game:
     def __init__(self):
@@ -21,6 +22,7 @@ class Game:
         self.loot = []
         self.item = []
         self.border = []
+        self.graves = []
         self.resolution = (975,687)
         self.screen = pygame.display.set_mode(self.resolution)#Creating Screen    
         self.running = False
@@ -28,6 +30,8 @@ class Game:
         self.current_time = pygame.time.get_ticks()
         self.timer = 60000 + pygame.time.get_ticks()
         self.font = pygame.font.SysFont(None, 50)
+        self.spawnPoint1 = (370, 480)
+        self.spawnPoint2 = (500, 600)
         self.run()
 
     # Game Over Text
@@ -38,7 +42,7 @@ class Game:
 
     def setup(self):
         self.running = True
-        self.player = [Player(370, 480, self.resolution), Opponent(500, 600, self.resolution)]
+        self.player = [Player(self.spawnPoint1[0], self.spawnPoint1[1], self.resolution), Opponent(self.spawnPoint2[0], self.spawnPoint2[1], self.resolution)]
         pygame.display.set_caption("Something")     #Title and Icon
         self.icon = pygame.image.load("assets/Icon.png")
         pygame.display.set_icon(self.icon)
@@ -181,11 +185,16 @@ class Game:
             loots.show_loot(self)
         for player in self.player:
             if player.isDead:
+                self.graves.append(Grave(player.x, player.y))
                 if player.type == 1:
-                    player.img = pygame.image.load('assets/Player/grave.png')
-                else:
-                    player.img = pygame.image.load('assets/Player/grave.png')
-                player.show_player(self.screen)
+                    player.x = self.spawnPoint1[0]
+                    player.y = self.spawnPoint1[1]
+                if player.type == 2:
+                    player.x = self.spawnPoint2[0]
+                    player.y = self.spawnPoint2[1]
+                player.isDead = False
+        for grave in self.graves:
+            grave.show_grave(self)
         for wall in self.walls:
             wall.show_wall(self.screen)
         # for bullet in self.player.bullet:
