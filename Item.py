@@ -13,13 +13,13 @@ class Item:
         self.change = 0.001
         self.type = type
         if type == "Speed":
-            self.img = pygame.image.load('assets/Enemy/Enemy_64.png')
+            self.img = pygame.image.load('assets/coin.png')
         elif type == "Strong":
-            self.img = pygame.image.load('assets/Creature/Creature_4.png')
+            self.img = pygame.image.load('assets/coin.png')
         elif type == "Long":
-            self.img = pygame.image.load('assets/Creature/Creature_7.png')
+            self.img = pygame.image.load('assets/coin.png')
         elif type == "Push":
-            self.img = pygame.image.load('assets/Creature/Creature_8.png')
+            self.img = pygame.image.load('assets/coin.png')
     
     def item_timer(self, player, game):
         if self.state == "Equipped":
@@ -55,7 +55,7 @@ class Item:
 
     def show_item(self, game):
         if self.state == "Ready":
-            game.screen.blit(self.img, (self.x, self.y))
+            game.screen.blit(self.img, (self.x + 10, self.y + 10))
             for player in game.player:
                 game.Collider_player(self, Box(self, player), player)
     

@@ -26,7 +26,7 @@ class Game:
         self.running = False
         self.clock = pygame.time.Clock()
         self.current_time = pygame.time.get_ticks()
-        self.timer = 20000 + pygame.time.get_ticks()
+        self.timer = 60000 + pygame.time.get_ticks()
         self.font = pygame.font.SysFont(None, 50)
         self.run()
 
@@ -179,6 +179,13 @@ class Game:
                 bombs.show_bomb(self)
         for loots in self.loot:
             loots.show_loot(self)
+        for player in self.player:
+            if player.isDead:
+                if player.type == 1:
+                    player.img = pygame.image.load('assets/Player/grave.png')
+                else:
+                    player.img = pygame.image.load('assets/Player/grave.png')
+                player.show_player(self.screen)
         for wall in self.walls:
             wall.show_wall(self.screen)
         # for bullet in self.player.bullet:
@@ -186,7 +193,8 @@ class Game:
         for enem in self.enemy:
             enem.show_enemy(self.screen)
         for player in self.player:
-            player.show_player(self.screen)
+            if not player.isDead:
+                player.show_player(self.screen)
         for item in self.item:
             item.show_item(self)
         for ex in self.explosion:
@@ -195,8 +203,12 @@ class Game:
             borders.show_border(self)
         for player in self.player:
             player.show_score(self.screen)
-            if player.isDead:
-                self.draw_text("HE DEAD", self.font, (255,255,255), self.screen, 500, 500)
+        if len(self.player) == 1:
+            if self.player[0].type == 1:
+                self.draw_text("APPLE DEAD", self.font, (255,255,255), self.screen, 400, 500)
+            else:
+                self.draw_text("BANANA FAILURE", self.font, (255,255,255), self.screen, 500, 500)
+
     
     def update(self):
         for player in self.player:
@@ -230,9 +242,15 @@ class Game:
             second = (int((self.timer - self.current_time)/1000)+1)%60
             minute = int((int((self.timer - self.current_time)/1000)+1)/60)
             time = f"{minute:02d}" + ":" + f"{second:02d}"
-            self.draw_text(time, self.font, (255,255,255), self.screen, 300, 400)
+            self.draw_text(time, self.font, (255,255,255), self.screen, self.resolution[0] / 2, 50)
         else:
-            self.draw_text("Time's UP!", self.font, (255,255,255), self.screen, 300, 400)
+            if not self.player[0].isDead and not self.player[1].isDead:
+                if self.player[0].score > self.player[1].score:
+                    self.draw_text("BANANA WINS", self.font, (255,255,255), self.screen, 300, 400)
+                elif self.player[0].score < self.player[1].score:
+                    self.draw_text("APPLE WINS", self.font, (255,255,255), self.screen, 500, 400)
+                else:
+                    self.draw_text("DRAW!", self.font, (255,255,255), self.screen, self.resolution[0] / 2, 400)
             # self.running = False
 
     def isWall(self, x, y):
@@ -313,7 +331,8 @@ class Game:
             self.show_screen()
 
             #Game receive input
-            self.player[0].handleEvent(self)
+            for player in self.player:
+                player.handleEvent(self)
 
             #Game process input
             self.update()

@@ -27,7 +27,6 @@ class Explosion:
             if distance < 50:
                 print("He Dead")
                 player.isDead = True
-                del player
 
     def show_explosion(self, game):
         self.timer += self.change
